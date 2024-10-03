@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    .heading {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #2c3e50;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      background: linear-gradient(to right, #ecf0f1, #bdc3c7);
+      /* border-radius: 10px; */
+      padding: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: inline-block;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+        0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      margin-bottom: 5%;
+      border-radius: 25px;
+      padding: 20px;
+      overflow: auto;
+      resize: both;
+      text-overflow: ellipsis;
+      color: white;
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+      color: white;
+      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3),
+        0 12px 40px 0 rgba(0, 0, 0, 0.29);
+    }
+
+    .submit_form {
+      text-align: center;
+      color: white;
+      padding: 20px;
+      background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+      border-radius: 25px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+        0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    .submit_form:hover {
+      background: linear-gradient(135deg, #ff4b2b 0%, #ff416c 100%);
+      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3),
+        0 12px 40px 0 rgba(0, 0, 0, 0.29);
+    }
+
+    .submit_form form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+    }
+
+    .submit_form input[type="text"],
+    .submit_form textarea,
+    .submit_form input[type="datetime-local"] {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      color: black;
+      box-sizing: border-box;
+    }
+
+    .submit_form label {
+      width: 80%;
+      text-align: left;
+      margin-bottom: 5px;
+    }
+
+    .submit_form input[type="submit"] {
+      background-color: white;
+      color: #ff416c;
+      border: 2px solid #ff416c;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: background-color 0.3s, color 0.3s, border 0.3s;
+    }
+    .submit_form input[type="submit"]:hover {
+      background-color: #ff416c;
+      color: white;
+      border: 2px solid white;
+    }
+  </style>
+
+  <body class="container-fluid">
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-info">
+      <strong>{{message}}</strong>
+    </div>
+    {% endfor %} {% endif %}
+    <center class="row">
+      <h1 class="heading"><i>TODO LIST</i></h1>
+    </center>
+    <div class="row">
+      <div class="col-md-8">
+        {% for i in list %}
+        <div class="card">
+          <center><b>{{i.title}}</b></center>
+          <hr />
+          {{i.date}}
+          <hr />
+          {{i.details}}
+          <br />
+          <br />
+          <form
+            action="/del/{{i.id}}"
+            method="POST"
+            style="padding-right: 4%; padding-bottom: 3%"
+          >
+            {% csrf_token %}
+            <button
+              value="remove"
+              type="submit"
+              class="btn btn-primary"
+              style="
+                float: right;
+                background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+                color: white;
+                border: 2px solid #ff416c;
+                padding: 10px 20px;
+                border-radius: 25px;
+                font-size: medium;
+              "
+            >
+              <span class="glyphicon glyphicon-trash">&nbsp; remove</span>
+            </button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="col-md-1"></div>
+      <div class="col-md-3">
+        <div class="submit_form">
+          <form method="POST">
+            {% csrf_token %} {{forms}}
+            <center>
+              <input
+                type="submit"
+                class="btn btn-default"
+                value="Submit Task"
+              />
+            </center>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
